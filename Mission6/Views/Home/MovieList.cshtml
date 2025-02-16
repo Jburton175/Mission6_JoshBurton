@@ -1,0 +1,62 @@
+﻿@model List<Mission6.Models.Application>
+
+@{
+    ViewData["Title"] = "New Movie";
+}
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Director</th>
+            <th>Rating</th>
+            <th>Edited</th>
+            <th>LentTo</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr>
+                
+                <td>@x.Category</td>
+                <td>@x.Title</td>
+                <td>@x.Year</td>
+                <td>@x.Director</td>
+                <td>@x.Rating</td>
+                <td>@x.Edited</td>
+                <td>@x.LentTo</td>
+                <td>@x.Notes</td>
+
+                <td><a class="btn btn-info" asp-controller="Home" asp-action="Edit" asp-route-id="@x.MovieID">Edit</a></td>
+                <td><a class="btn btn-danger" asp-controller="Home" asp-action="Delete" asp-route-id="@x.MovieID">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

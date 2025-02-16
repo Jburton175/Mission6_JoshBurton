@@ -1,0 +1,10 @@
+﻿@model Mission6.Models.Application
+
+<h2>Confirm Deletion of @Model.Title</h2>
+
+<form method="post">
+	<input type="hidden" asp-for="MovieID" />
+
+	<button type ="submit">Delete</button>
+	<a class="btn btn-info" asp-controller="Home" asp-action="MovieList">Cancel</a>
+</form>

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mission6.Models;
 
 public class HomeController : Controller
@@ -35,5 +36,57 @@ public class HomeController : Controller
         _context.SaveChanges();
 
         return View("Complete", response);
+
     }
+
+
+    public IActionResult MovieList()
+    {
+        var response = _context.Movies
+            .OrderBy(x => x.Year).ToList();
+
+        return View(response);
+    }
+
+    [HttpGet]
+
+    public IActionResult Edit(int id)
+    {
+        var response = _context.Movies
+            .Single(x => x.MovieID.Equals(id));
+
+        return View("EditMovie", response);
+    }
+
+    [HttpPost]
+    public IActionResult Edit(Application info)
+    {
+        _context.Update(info);
+        _context.SaveChanges();
+
+
+        return RedirectToAction("MovieList");
+
+    }
+
+    [HttpGet]
+    public IActionResult Delete(int id)
+    {
+        var del_record = _context.Movies
+            .Single(x => x.MovieID.Equals(id));
+
+        return View(del_record);
+
+    }
+
+    [HttpPost]
+    public IActionResult Delete(Application info)
+    {
+        _context.Movies.Remove(info);
+        _context.SaveChanges();
+
+        return RedirectToAction("MovieList");
+    }
+
+
 }
