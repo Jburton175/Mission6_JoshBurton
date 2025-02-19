@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Mission6.Models;
 
@@ -26,23 +27,37 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult NewMovie()
     {
+        ViewBag.Categories = new SelectList(
+            _context.Categories.OrderBy(x => x.CategoryName),
+            "CategoryId",
+            "CategoryName"
+        );
+
         return View("NewMovie");
     }
+
 
     [HttpPost]
     public IActionResult NewMovie(Application response)
     {
+
+        if (response.CategoryId == 0) // Ensure 0 doesn't get stored as an ID
+        {
+            response.CategoryId = null;
+        }
+
         _context.Movies.Add(response);
         _context.SaveChanges();
 
         return View("Complete", response);
-
     }
+
 
 
     public IActionResult MovieList()
     {
         var response = _context.Movies
+            .Include(x => x.Category)
             .OrderBy(x => x.Year).ToList();
 
         return View(response);
@@ -52,10 +67,23 @@ public class HomeController : Controller
 
     public IActionResult Edit(int id)
     {
-        var response = _context.Movies
-            .Single(x => x.MovieID.Equals(id));
+        var movie = _context.Movies
+            .Include(x => x.Category)
+            .SingleOrDefault(x => x.MovieId == id);
 
-        return View("EditMovie", response);
+        if (movie == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Categories = new SelectList(
+            _context.Categories.OrderBy(x => x.CategoryName),
+            "CategoryId",
+            "CategoryName",
+            movie.CategoryId
+        );
+
+        return View("EditMovie", movie);
     }
 
     [HttpPost]
@@ -73,7 +101,7 @@ public class HomeController : Controller
     public IActionResult Delete(int id)
     {
         var del_record = _context.Movies
-            .Single(x => x.MovieID.Equals(id));
+            .Single(x => x.MovieId.Equals(id));
 
         return View(del_record);
 
