@@ -36,6 +36,7 @@
             <th>Director</th>
             <th>Rating</th>
             <th>Edited</th>
+            <th>Copied To Plex</th>
             <th>LentTo</th>
             <th>Notes</th>
         </tr>
@@ -51,7 +52,8 @@
                 <td>@x.Year</td>
                 <td>@x.Director</td>
                 <td>@x.Rating</td>
-                <td>@x.Edited</td>
+                <td>@(x.Edited == 1 ? "Yes" : "No")</td>
+                <td>@(x.CopiedToPlex == 1 ? "Yes" : "No")</td>
                 <td>@x.LentTo</td>
                 <td>@x.Notes</td>
 
